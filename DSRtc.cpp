@@ -1,9 +1,10 @@
 /**
 * Authour:      Team R-Number
 * Date Created: 24/02/21
+* File name:    DSRtc.cpp
 */
 
-#include "rtc.h"
+#include "DSRtc.h"
 
 DSRtc::DSRtc()
 {
