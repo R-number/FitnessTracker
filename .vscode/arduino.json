@@ -1,0 +1,5 @@
+{
+    "board": "arduino:sam:arduino_due_x_dbg",
+    "port": "/dev/tty.usbserial-0001",
+    "sketch": "FitnessTracker.ino"
+}
