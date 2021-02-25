@@ -17,6 +17,7 @@ void DSRtc::init()
     {
         Serial.println("Error: could not find RTC");
     }
+    Serial.println("init RTC");
 
     /* debug only (would request this from bt connected phone) */
     m_rtc.adjust(DateTime(2021, 2, 24, 19, 0, 9));    // set date time to 24/02/21 19:00.00

@@ -19,6 +19,7 @@ BTComms::BTComms(HardwareSerial &BTSerialPort)
 void BTComms::init()
 {
     m_BT.begin(9600);            // begin comms with HC-05 module, default baud rate is 9600
+    Serial.println("init BT");
     pinMode(STATUS_PIN, INPUT);
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(EN_PIN, OUTPUT);
