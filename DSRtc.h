@@ -8,7 +8,7 @@
 
 #include <RTClib.h>
 
-/* class to abstarct use of the DS3231 rtc using RTClib */
+/* class to abstract use of the DS3231 rtc using RTClib */
 
 class DSRtc
 {

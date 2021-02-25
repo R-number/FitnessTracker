@@ -11,7 +11,6 @@
 
 BTComms::BTComms(HardwareSerial &BTSerialPort)
     :m_BT(BTSerialPort)
-
 {
     /* empty constructor */
 }
