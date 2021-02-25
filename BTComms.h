@@ -20,4 +20,4 @@ public:
 
 private:
     HardwareSerial &m_BT;       // keep a reference to the hardware serial port we are using
-};
+};                              // this way we can refer to it without using confusing Serial'n' name
