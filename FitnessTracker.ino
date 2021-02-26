@@ -29,6 +29,7 @@ void loop()
     
     btComms.read();
     btComms.write();
+    display.increment();
 
     Serial.print("Heartrate val: ");    // read heartrate and print to console
     Serial.println(analogRead(HEARTRATE_PIN));
