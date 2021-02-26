@@ -45,11 +45,11 @@ Be sure to install it!
 #define SCREEN_HEIGHT 128 // Change this to 96 for 1.27" OLED.
 
 // You can use any (4 or) 5 pins 
-#define SCLK_PIN 2
-#define MOSI_PIN 3
-#define DC_PIN   4
-#define CS_PIN   5
-#define RST_PIN  6
+// #define SCLK_PIN 2
+// #define MOSI_PIN 3
+#define DC_PIN   23
+#define CS_PIN   22
+#define RST_PIN  24
 
 // Color definitions
 #define	BLACK           0x0000
@@ -66,6 +66,7 @@ class Display
 public:
     Display();
     void init();
+    void increment();
 
 private:
     void testLines(uint16_t color);
