@@ -13,15 +13,18 @@ BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1
 void setup()
 {
     Serial.begin(115200);       // begin serial for debug
+    Serial.println("Begin init");
     rtc.init();                 // init the rtc
     btComms.init();             // init the bt comms
 }
 
 void loop()
 {
-    rtc.printTime();            // print out the current time
+    // rtc.printTime();            // print out the current time
     
-    btComms.read();
-    btComms.write();
+    // btComms.read();
+    // btComms.write();
 
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    delay(500);
 }
