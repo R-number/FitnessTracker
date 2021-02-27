@@ -1,5 +1,5 @@
 {
     "board": "arduino:sam:arduino_due_x_dbg",
-    "port": "/dev/tty.usbmodem143301",
+    "port": "/dev/tty.usbmodem143201",
     "sketch": "FitnessTracker.ino"
 }
