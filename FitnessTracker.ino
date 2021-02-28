@@ -25,12 +25,14 @@ void setup()
 
 void loop()
 {
-    rtc.printTime();                    // print out the current time
-    
+    DateTime now = rtc.get();
+    rtc.print(now);                    // print out the current time
+
+    delay(500);
     btComms.read();
     btComms.write();
-    display.increment();
+    // display.increment();
 
-    Serial.print("Heartrate val: ");    // read heartrate and print to console
-    Serial.println(analogRead(HEARTRATE_PIN));
+    // Serial.print("Heartrate val: ");    // read heartrate and print to console
+    // Serial.println(analogRead(HEARTRATE_PIN));
 }
