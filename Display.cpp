@@ -6,6 +6,8 @@ File name:      Lcd.cpp
 
 #include "Display.h"
 
+// #define RUN_TEST 
+
 float p = 3.1415926;
 
 Display::Display()
@@ -27,6 +29,7 @@ void Display::init() // the following code was taken from test.ino for the oled 
     // for rendering the test pattern talks directly to the display and
     // ignores any rotation.
 
+    #ifdef RUN_TEST
     uint16_t time = millis();
     m_oled.fillRect(0, 0, 128, 128, BLACK);
     time = millis() - time;
@@ -83,10 +86,10 @@ void Display::init() // the following code was taken from test.ino for the oled 
 
     testTriangles();
     delay(500);
+    #endif
 
     m_oled.fillScreen(BLACK);
     Serial.println("done");
-    delay(1000);
 }
 
 void Display::increment()
