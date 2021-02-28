@@ -16,7 +16,9 @@ public:
     DSRtc();
 
     void init();
-    void printTime();
+    const DateTime& get() const;
+    void set(DateTime &t);
+    void print(const DateTime &t);
 
 private:
     RTC_DS3231 m_rtc;     // setup the rtc object

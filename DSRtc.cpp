@@ -21,26 +21,31 @@ void DSRtc::init()
 
     /* debug only (would request this from bt connected phone) */
     m_rtc.adjust(DateTime(2021, 2, 24, 19, 0, 9));    // set date time to 24/02/21 19:00.00
+    print(get());
 }
 
-void DSRtc::printTime()
+const DateTime& DSRtc::get() const
 {
-    /* code taken from ds3231.ino example and adapted into printTime function */
-     DateTime currentTime = m_rtc.now();
-     char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    return m_rtc.now();
+}
 
-    Serial.print(currentTime.year(), DEC);
+void DSRtc::set(DateTime &t)
+{
+    m_rtc.adjust(t);
+}
+
+void DSRtc::print(const DateTime &t)
+{
+    Serial.print(t.day(), DEC);
     Serial.print('/');
-    Serial.print(currentTime.month(), DEC);
+    Serial.print(t.month(), DEC);
     Serial.print('/');
-    Serial.print(currentTime.day(), DEC);
-    Serial.print(" (");
-    Serial.print(daysOfTheWeek[currentTime.dayOfTheWeek()]);
-    Serial.print(") ");
-    Serial.print(currentTime.hour(), DEC);
+    Serial.print(t.year(), DEC);
+    Serial.print(" ");
+    Serial.print(t.hour(), DEC);
     Serial.print(':');
-    Serial.print(currentTime.minute(), DEC);
+    Serial.print(t.minute(), DEC);
     Serial.print(':');
-    Serial.print(currentTime.second(), DEC);
+    Serial.print(t.second(), DEC);
     Serial.println();
 }
