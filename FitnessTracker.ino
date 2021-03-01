@@ -9,7 +9,11 @@
 #include "Display.h"
 
 DSRtc rtc;
-BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1
+#ifdef defined(ARDUINO_SAM_DUE)
+BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Arduino Due
+#else
+BTComms btComms(Serial);        // for other arduino's use the only serial port
+#endif
 Display display;
 
 #define HEARTRATE_PIN   A0
