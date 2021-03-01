@@ -11,6 +11,7 @@
 DSRtc rtc;
 #ifdef defined(ARDUINO_SAM_DUE)
 BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Arduino Due
+
 #else
 BTComms btComms(Serial);        // for other arduino's use the only serial port
 #endif
@@ -31,6 +32,7 @@ void loop()
 {
     DateTime now = rtc.get();
     display.showTime(now);
+    display.monitorTimeout(now, 5*60);      // timeout after 5 mins
 
     delay(500);
     btComms.read();

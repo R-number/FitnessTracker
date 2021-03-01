@@ -69,6 +69,7 @@ public:
     void init();
     void increment();
     void showTime(DateTime &t);
+    void monitorTimeout(DateTime &t, uint16_t timeoutTime);
 
 private:
 

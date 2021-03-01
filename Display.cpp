@@ -137,6 +137,16 @@ void Display::showTime(DateTime &t)
     }
 }
 
+void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the display after "timeoutTime" number of seconds
+{                                                               // use to avoid screen burn in
+    static DateTime oldTime = t;
+
+    if((t-oldTime).totalseconds() > timeoutTime)
+    {
+        m_oled.enableDisplay(false);
+    }
+}
+
 void Display::testLines(uint16_t color)
 {
     m_oled.fillScreen(BLACK);
