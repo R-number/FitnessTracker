@@ -39,6 +39,7 @@ Be sure to install it!
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
+#include <RTClib.h>      // for DateTime declration
 
 // Screen dimensions
 #define SCREEN_WIDTH  128
@@ -67,8 +68,11 @@ public:
     Display();
     void init();
     void increment();
+    void showTime(DateTime &t);
 
 private:
+
+    /* --- test functions from test.ino --- */
     void testLines(uint16_t color);
     void testDrawText(char *text, uint16_t color);
     void testFastLines(uint16_t color1, uint16_t color2);
@@ -80,6 +84,10 @@ private:
     void testRoundRects();
     void printTest();
     void testPattern();
+    /* ----- */
+
+    void formatTime(char buf[], uint8_t h, uint8_t m);
+    void formatTime(char buf[], uint8_t h, uint8_t m, uint8_t s);
 
 private:
     Adafruit_SSD1351 m_oled = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, 

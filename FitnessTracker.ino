@@ -26,7 +26,7 @@ void setup()
 void loop()
 {
     DateTime now = rtc.get();
-    rtc.print(now);                    // print out the current time
+    display.showTime(now);
 
     delay(500);
     btComms.read();

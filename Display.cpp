@@ -109,6 +109,29 @@ void Display::increment()
     m_oled.print(count, DEC);
 }
 
+void Display::showTime(DateTime &t)
+{
+    char newBuf[20];
+    static char oldBuf[20] = {0};
+
+    formatTime(newBuf, t.hour(), t.minute());
+
+    if(strcmp(newBuf, oldBuf) != 0)    // compare the two strings
+    {
+        /* we get here if they are different */
+        m_oled.setTextSize(2);
+        m_oled.setCursor(2, 10);
+        m_oled.setTextColor(BLACK);     // print the old string in the bg colour
+        m_oled.print(oldBuf);           // this will earse the old time
+
+        m_oled.setCursor(2, 10);         // reset the cursor
+        m_oled.setTextColor(RED);
+        m_oled.print(newBuf);           // print the current buffer
+
+        strcpy(oldBuf, newBuf);         // old = new
+    }
+}
+
 void Display::testLines(uint16_t color)
 {
     m_oled.fillScreen(BLACK);
@@ -299,4 +322,14 @@ void Display::testPattern()
         m_oled.fillRect(0, m_oled.height() * c / 8, m_oled.width(), m_oled.height() / 8,
                         pgm_read_word(&colors[c]));
     }
+}
+
+void Display::formatTime(char buf[], uint8_t h, uint8_t m)
+{
+    sprintf(buf, "%02u:%02u", h, m);
+}
+
+void Display::formatTime(char buf[], uint8_t h, uint8_t m, uint8_t s)
+{
+    sprintf(buf, "%02u:%02u:%02u", h, m, s);
 }
