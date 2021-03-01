@@ -5,4 +5,4 @@
 - Pedometer
 - Bluetooth configuration with app 
 
-These modules are all controlled using a centralised microcontroller.
+These modules are all controlled using a centralised microcontroller (Arduino Due).
