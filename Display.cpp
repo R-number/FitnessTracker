@@ -5,6 +5,7 @@ File name:      Lcd.cpp
 */
 
 #include "Display.h"
+#include "bitmaps.h"
 
 // #define RUN_TEST 
 
