@@ -10,7 +10,7 @@
 #include "GPS.h"
 
 DSRtc rtc;
-#ifdef defined(ARDUINO_SAM_DUE)
+#if defined(ARDUINO_SAM_DUE)
 BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Arduino Due
 GPS gps(Serial2);
 #else
@@ -28,6 +28,7 @@ void setup()
     rtc.init();                         // init the rtc
     btComms.init();                     // init the bt comms
     display.init();                     // init the display - note this also runs multiple test functions
+    gps.init();
 }
 
 void loop()
@@ -35,6 +36,9 @@ void loop()
     DateTime now = rtc.get();
     display.showTime(now);
     display.monitorTimeout(now, 5*60);      // timeout after 5 mins
+
+    gps.monitor();
+
 
     delay(500);
     btComms.read();
