@@ -3,6 +3,7 @@
         {
             "name": "Mac",
             "includePath": [
+                "/Users/Marcus/Programming/Arduino/libraries/RTClib",
                 "/Users/Marcus/Library/Arduino15/packages/arduino/tools/**",
                 "/Users/Marcus/Programming/Arduino/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/libraries/**",
