@@ -7,13 +7,15 @@
 #include "DSRtc.h"
 #include "BTComms.h"
 #include "Display.h"
+#include "GPS.h"
 
 DSRtc rtc;
 #ifdef defined(ARDUINO_SAM_DUE)
 BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Arduino Due
-
+GPS gps(Serial2);
 #else
 BTComms btComms(Serial);        // for other arduino's use the only serial port
+GPS gps(Serial);
 #endif
 Display display;
 
