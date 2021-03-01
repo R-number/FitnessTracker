@@ -18,7 +18,6 @@ Display::Display()
 void Display::init() // the following code was taken from test.ino for the oled graphics library
 {                    // run this init to test all the features
     m_oled.begin();
-
     Serial.println("init display");
 
     // You can optionally rotate the display by running the line below.
@@ -29,7 +28,7 @@ void Display::init() // the following code was taken from test.ino for the oled 
     // for rendering the test pattern talks directly to the display and
     // ignores any rotation.
 
-    #ifdef RUN_TEST
+#ifdef RUN_TEST
     uint16_t time = millis();
     m_oled.fillRect(0, 0, 128, 128, BLACK);
     time = millis() - time;
@@ -86,7 +85,11 @@ void Display::init() // the following code was taken from test.ino for the oled 
 
     testTriangles();
     delay(500);
-    #endif
+
+    m_oled.fillScreen(BLACK);
+    m_oled.drawBitmap(5, 5, heartLogo, 50, 50, BLACK, RED);
+    delay(1000);
+#endif
 
     m_oled.fillScreen(BLACK);
     Serial.println("done");
@@ -107,6 +110,7 @@ void Display::increment()
     m_oled.setTextSize(1);
     m_oled.print("Count: ");        // print every loop to catch spi on scope
     m_oled.print(count, DEC);
+
 }
 
 void Display::showTime(DateTime &t)
