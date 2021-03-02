@@ -7,6 +7,7 @@ File name:      GPS.h
 #pragma once
 
 #include <Arduino.h>
+#include <NMEAGPS.h>
 
 class GPS
 {
@@ -17,5 +18,7 @@ public:
     void monitor();
 
 private:
-    HardwareSerial &m_GPSSerial;
+    HardwareSerial &m_gpsPort;
+    NMEAGPS m_gpsParser;
+    gps_fix m_fix;
 };
