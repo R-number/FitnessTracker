@@ -13,6 +13,11 @@
         "istream": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "fstream": "cpp",
+        "iosfwd": "cpp",
+        "compare": "cpp",
+        "type_traits": "cpp",
+        "algorithm": "cpp"
     }
 }
