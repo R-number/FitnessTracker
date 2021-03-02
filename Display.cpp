@@ -8,6 +8,7 @@ File name:      Lcd.cpp
 #include "bitmaps.h"
 
 // #define RUN_TEST 
+#define DEBUG_SERIAL        // note local only to this file
 
 float p = 3.1415926;
 
@@ -116,24 +117,29 @@ void Display::increment()
 
 void Display::showTime(DateTime &t)
 {
-    char newBuf[20];
-    static char oldBuf[20] = {0};
+    static DateTime oldTime(0, 0, 0);
+    char buf[20] = {0};
 
-    formatTime(newBuf, t.hour(), t.minute());
-
-    if(strcmp(newBuf, oldBuf) != 0)    // compare the two strings
+    if(((t - oldTime).seconds() == 0) && (oldTime != t))
     {
         /* we get here if they are different */
         m_oled.setTextSize(2);
+
         m_oled.setCursor(2, 10);
         m_oled.setTextColor(BLACK);     // print the old string in the bg colour
-        m_oled.print(oldBuf);           // this will earse the old time
+        formatTime(buf, oldTime.hour(), oldTime.minute());
+        m_oled.print(buf);              // this will erase the old time
 
-        m_oled.setCursor(2, 10);         // reset the cursor
+        m_oled.setCursor(2, 10);        // reset the cursor
         m_oled.setTextColor(RED);
-        m_oled.print(newBuf);           // print the current buffer
+        formatTime(buf, t.hour(), t.minute());
+        m_oled.print(buf);              // print the current buffer
 
-        strcpy(oldBuf, newBuf);         // old = new
+    #ifdef DEBUG_SERIAL
+        Serial.println(buf);
+    #endif
+
+        oldTime = t; 
     }
 }
 
