@@ -7,6 +7,12 @@
         "vector": "cpp",
         "initializer_list": "cpp",
         "string_view": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "*.tcc": "cpp",
+        "functional": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "memory": "cpp"
     }
 }
