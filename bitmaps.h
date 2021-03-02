@@ -4,6 +4,8 @@ Date Created:   01/03/2021
 File name:      bitmaps.h
 */
 
+#pragma once
+
 /* note this needs changing to image without background but basic concept can be tested */
 const uint8_t heartLogo[] PROGMEM = { 
 0xff, 0xfe, 0x0f, 0xfc, 0x1f, 0xff, 0xc0, 0xff, 0xfb, 0xfb, 0xf7, 0xf7, 0xff, 0xc0, 0xff, 0xf7, 
