@@ -35,17 +35,24 @@ void setup()
 void loop()
 {
     static uint32_t deltaTime = 0;
+    static DateTime currentDT;
 
     if(millis() - deltaTime > 500)
     {
         digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
         deltaTime = millis();
-        DateTime now = rtc.get();
-        display.showTime(now);
-        display.monitorTimeout(now, 1*60);      // timeout after n mins
-    }
+        currentDT = rtc.get();
+        display.showTime(currentDT);
+        // display.monitorTimeout(currentDT, 2*60);      // timeout after n mins
+        if(gps.isValid())
+        {
+            display.showGpsData(gps.getLatitude(), gps.getLongitude(), gps.getAltitude(), gps.getDistance());
+        }
+        display.showGpsSignal(gps.isValid());
 
-    gps.monitor();
+    }
+    
+    gps.loop();     // poll the gps
 
 
     // btComms.read();
