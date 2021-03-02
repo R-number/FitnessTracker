@@ -117,7 +117,7 @@ void Display::increment()
 
 void Display::showTime(DateTime &t)
 {
-    static DateTime oldTime(0, 0, 0);
+    static DateTime oldTime;    // note, may have to wait 1 min for initial update
     char buf[20] = {0};
 
     if(((t - oldTime).seconds() == 0) && (oldTime != t))
@@ -151,6 +151,111 @@ void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the 
     {
         m_oled.enableDisplay(false);
     }
+}
+
+void Display::showGpsSignal(bool show)
+{
+    m_oled.setTextSize(1);
+    m_oled.setCursor(100, 5);
+    if(show)
+    {
+        m_oled.setTextColor(GREEN);
+    }
+    else
+    {
+        m_oled.setTextColor(RED);
+    }
+    m_oled.print("GPS");
+}
+
+void Display::showGpsData(float lat, float lng)
+{
+    static float oldLat, oldLong;
+
+    m_oled.setTextSize(1);
+
+    /* draw old stuff in black to erase */
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(BLACK);
+    m_oled.print("Lat: ");
+    m_oled.println(oldLat);
+    m_oled.print("Lng: ");
+    m_oled.println(oldLong);    
+
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(RED);
+    m_oled.print("Lat: ");
+    m_oled.println(lat);
+    m_oled.print("Lng: ");
+    m_oled.println(lng);
+
+    oldLat = lat;
+    oldLong = lng;
+}
+
+void Display::showGpsData(float lat, float lng, float alt)
+{
+    static float oldLat, oldLong, oldAlt;
+
+    m_oled.setTextSize(1);
+
+    /* draw old stuff in black to erase */
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(BLACK);
+    m_oled.print("Lat: ");
+    m_oled.println(oldLat);
+    m_oled.print("Lng: ");
+    m_oled.println(oldLong);
+    m_oled.print("Alt: ");
+    m_oled.println(oldAlt);        
+
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(RED);
+    m_oled.print("Lat: ");
+    m_oled.println(lat);
+    m_oled.print("Lng: ");
+    m_oled.println(lng);
+    m_oled.print("Alt: ");
+    m_oled.println(alt);
+
+    oldLat = lat;
+    oldLong = lng;
+    oldAlt = alt;    
+}
+
+void Display::showGpsData(float lat, float lng, float alt, float dist)
+{
+    static float oldLat, oldLong, oldAlt, oldDist;
+
+    m_oled.setTextSize(1);
+
+    /* draw old stuff in black to erase */
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(BLACK);
+    m_oled.print("Lat: ");
+    m_oled.println(oldLat);
+    m_oled.print("Lng: ");
+    m_oled.println(oldLong);
+    m_oled.print("Alt: ");
+    m_oled.println(oldAlt);
+    m_oled.print("Dst: ");
+    m_oled.println(oldDist);        
+
+    m_oled.setCursor(0, 40);
+    m_oled.setTextColor(RED);
+    m_oled.print("Lat: ");
+    m_oled.println(lat);
+    m_oled.print("Lng: ");
+    m_oled.println(lng);
+    m_oled.print("Alt: ");
+    m_oled.println(alt);
+    m_oled.print("Dst: ");
+    m_oled.println(dist); 
+
+    oldLat = lat;
+    oldLong = lng;
+    oldAlt = alt;  
+    oldDist = dist;   
 }
 
 void Display::testLines(uint16_t color)

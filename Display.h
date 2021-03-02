@@ -68,8 +68,14 @@ public:
     Display();
     void init();
     void increment();
+
     void showTime(DateTime &t);
     void monitorTimeout(DateTime &t, uint16_t timeoutTime);
+
+    void showGpsSignal(bool show);
+    void showGpsData(float lat, float lng);
+    void showGpsData(float lat, float lng, float alt);
+    void showGpsData(float lat, float lng, float alt, float dist);
 
 private:
 
