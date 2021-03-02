@@ -13,9 +13,12 @@ DSRtc::DSRtc()
 
 void DSRtc::init()
 {
-    if(!m_rtc.begin())            // attempt to init the rtc
+    static uint8_t count = 0;
+    while(!m_rtc.begin() && count < 50)            // attempt to init the rtc
     {
+        count ++;
         Serial.println("Error: could not find RTC");
+        delay(10);
     }
     Serial.println("init RTC");
 
