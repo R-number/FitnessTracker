@@ -16,7 +16,7 @@ BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Ar
 BTComms btComms(Serial);        // for other arduino's use the only serial port
 #endif
 Display display;
-DFRobot_Heartrate heartrate(DIGITAL_MODE); ///< ANALOG_MODE or DIGITAL_MODE
+DFRobot_Heartrate heartrate(ANALOG_MODE); ///< ANALOG_MODE or DIGITAL_MODE
 
 #define HEARTRATE_PIN   A0
 
