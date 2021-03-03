@@ -7,6 +7,7 @@
 #include "DSRtc.h"
 #include "BTComms.h"
 #include "Display.h"
+#include <DFRobot_Heartrate.h>
 
 DSRtc rtc;
 #if defined(ARDUINO_SAM_DUE)
@@ -15,6 +16,7 @@ BTComms btComms(Serial1);       // setup the bluetooth with Serial port 1 for Ar
 BTComms btComms(Serial);        // for other arduino's use the only serial port
 #endif
 Display display;
+DFRobot_Heartrate heartrate(DIGITAL_MODE); ///< ANALOG_MODE or DIGITAL_MODE
 
 #define HEARTRATE_PIN   A0
 
@@ -29,14 +31,21 @@ void setup()
 
 void loop()
 {
-    DateTime now = rtc.get();
-    display.showTime(now);
+    // DateTime now = rtc.get();
+    // display.showTime(now);
 
-    delay(500);
-    btComms.read();
-    btComms.write();
+    // delay(500);
+    // btComms.read();
+    // btComms.write();
     // display.increment();
 
-    // Serial.print("Heartrate val: ");    // read heartrate and print to console
-    // Serial.println(analogRead(HEARTRATE_PIN));
+    uint8_t rateValue;
+    heartrate.getValue(HEARTRATE_PIN);
+    rateValue = heartrate.getRate();
+    if(rateValue)
+    {
+        Serial.println(rateValue);
+    }
+    delay(20);
+
 }
