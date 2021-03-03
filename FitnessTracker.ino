@@ -18,7 +18,40 @@ BTComms btComms(Serial);        // for other arduino's use the only serial port
 Display display;
 DFRobot_Heartrate heartSense(DIGITAL_MODE);
 #define HEARTRATE_PIN   A0
+#define BUFFER_SAMPLES   200
 
+
+uint8_t StabiliseRate()
+{
+    uint8_t rateBuffer=0, idle=0 ,ThrownRate=0;
+    heartSense.getValue(HEARTRATE_PIN);
+    uint16_t cumulativeRate=0;    
+    while(rateBuffer<BUFFER_SAMPLES)
+    {
+        uint8_t bpm =heartSense.getRate();
+        if (bpm)
+        {
+            Serial.print(rateBuffer);
+            Serial.print(" BPM: ");
+            Serial.println(bpm);
+            idle=0;
+            cumulativeRate+=bpm;            
+        }
+        else
+        {
+            idle++;
+            ThrownRate++;
+        } 
+        rateBuffer++;
+        delay(20);
+    } 
+    if (idle<80)
+    {
+        return cumulativeRate/(BUFFER_SAMPLES-ThrownRate);
+    }
+    else
+        return 0;           
+}
 
 void setup()
 {
@@ -31,15 +64,23 @@ void setup()
 void loop()
 {
     //DateTime now = rtc.get();
-    heartSense.getValue(HEARTRATE_PIN);
-    //uint16_t val = analogRead(HEARTRATE_PIN);
-    uint16_t bpmValue = heartSense.getRate();
-   // Serial.print("Analogue: ");
+    //heartSense.getValue(HEARTRATE_PIN);
+   // uint16_t val = analogRead(HEARTRATE_PIN);
+    uint8_t bpmValue = StabiliseRate();
+    //Serial.print("Analogue: ");
     //Serial.println(val);
-    Serial.print("BPM: ");
-    Serial.println(bpmValue);
+    if(bpmValue)
+    {
+        Serial.print("Overall BPM: ");
+        Serial.println(bpmValue);
+    }
+    else
+    {
+        Serial.println("Sensor has no signal");
+    }
+   
    // display.showTime(now);
-    delay(500);
-   btComms.read();
-   btComms.write();
+    
+   //btComms.read();
+   //btComms.write();
 }
