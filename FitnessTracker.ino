@@ -55,8 +55,8 @@ void loop()
     gps.loop();     // poll the gps
 
 
-    // btComms.read();
-    // btComms.write();
+    btComms.read();
+    btComms.write();
     // display.increment();
 
     // Serial.print("Heartrate val: ");    // read heartrate and print to console
