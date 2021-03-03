@@ -7,7 +7,7 @@ File name:      GPS.cpp
 #include "GPS.h"
 
 #define GPS_PORT_NAME   "Serial2"
-#define DEBUG_SERIAL
+// #define DEBUG_SERIAL
 
 GPS::GPS(HardwareSerial &GPSSerialPort)
     :m_gpsPort(GPSSerialPort)

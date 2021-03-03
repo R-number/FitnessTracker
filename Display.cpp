@@ -8,7 +8,7 @@ File name:      Lcd.cpp
 #include "bitmaps.h"
 
 // #define RUN_TEST 
-#define DEBUG_SERIAL        // note local only to this file
+// #define DEBUG_SERIAL        // note local only to this file
 
 float p = 3.1415926;
 
