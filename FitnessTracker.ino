@@ -19,32 +19,59 @@ Display display;
 DFRobot_Heartrate heartSense(DIGITAL_MODE);
 #define HEARTRATE_PIN   A0
 #define BUFFER_SAMPLES   200
+uint8_t bpmValue = 0;
+static uint32_t deltaTime = 0;
+uint8_t rateBuffer=0, idle=0 ,ThrownRate=0;
 
+uint16_t cumulativeRate=0;    
+uint8_t bpm =0;
 
 uint8_t StabiliseRate()
 {
-    uint8_t rateBuffer=0, idle=0 ,ThrownRate=0;
-    heartSense.getValue(HEARTRATE_PIN);
-    uint16_t cumulativeRate=0;    
-    while(rateBuffer<BUFFER_SAMPLES)
+   
+    if(millis()-deltaTime>20)
     {
-        uint8_t bpm =heartSense.getRate();
-        if (bpm)
+        deltaTime=millis();
+        heartSense.getValue(HEARTRATE_PIN);
+        bpm =heartSense.getRate();
+        if(rateBuffer<BUFFER_SAMPLES) 
         {
-            Serial.print(rateBuffer);
-            Serial.print(" BPM: ");
-            Serial.println(bpm);
-            idle=0;
-            cumulativeRate+=bpm;            
-        }
-        else
-        {
-            idle++;
-            ThrownRate++;
+        
+            if (bpm)
+            {
+                //Serial.print(rateBuffer);
+                //Serial.print(" BPM: ");
+               // Serial.println(bpm);
+                //Serial.print(" Delta time: ");
+                //Serial.println(deltaTime);
+                idle=0;
+                cumulativeRate+=bpm;    
+                       
+            }
+            else
+            {
+               // Serial.print(rateBuffer);
+                //Serial.print(" BPM: ");
+               // Serial.println(bpm);
+               // Serial.print(" Delta time: ");
+               // Serial.println(deltaTime);
+                idle++;
+                ThrownRate++;
+            }             
+            rateBuffer++; 
         } 
-        rateBuffer++;
-        delay(20);
-    } 
+    }
+    
+    if(rateBuffer==200)
+    {
+        rateBuffer=0;
+        idle=0;
+        ThrownRate=0;
+    }
+    else
+    {
+        Serial.println("Waiting for delay");
+    }
     if (idle<80)
     {
         return cumulativeRate/(BUFFER_SAMPLES-ThrownRate);
@@ -66,9 +93,10 @@ void loop()
     //DateTime now = rtc.get();
     //heartSense.getValue(HEARTRATE_PIN);
    // uint16_t val = analogRead(HEARTRATE_PIN);
-    uint8_t bpmValue = StabiliseRate();
+    bpmValue = StabiliseRate();
     //Serial.print("Analogue: ");
     //Serial.println(val);
+  
     if(bpmValue)
     {
         Serial.print("Overall BPM: ");
