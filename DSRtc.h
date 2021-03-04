@@ -16,7 +16,7 @@ public:
     DSRtc();
 
     void init();
-    const DateTime& get() const;
+    DateTime get() const;
     void set(DateTime &t);
     void print(const DateTime &t);
 

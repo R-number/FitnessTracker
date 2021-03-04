@@ -27,7 +27,7 @@ void DSRtc::init()
     print(get());
 }
 
-const DateTime& DSRtc::get() const
+DateTime DSRtc::get() const
 {
     return m_rtc.now();
 }
