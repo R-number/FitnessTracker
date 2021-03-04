@@ -18,6 +18,11 @@
         "iosfwd": "cpp",
         "compare": "cpp",
         "type_traits": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "limits": "cpp",
+        "ostream": "cpp",
+        "numeric": "cpp",
+        "streambuf": "cpp",
+        "sstream": "cpp"
     }
 }
