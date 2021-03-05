@@ -56,34 +56,34 @@ uint8_t StabiliseRate()
         return 0;
 
 
-    if(millis() - deltaTime > 20)
-    {
-        heartSense.getValue(HEARTRATE_PIN);
-        uint8_t bpm = heartSense.getRate();
+    // if(millis() - deltaTime > 20)
+    // {
+    //     heartSense.getValue(HEARTRATE_PIN);
+    //     uint8_t bpm = heartSense.getRate();
 
-        if(bpm)
-        {
-            cumulativeRate += bpm;
-            count++;
-        }
-        else
-        {
-            cumulativeRate = 0;
-        }
+    //     if(bpm)
+    //     {
+    //         cumulativeRate += bpm;
+    //         count++;
+    //     }
+    //     else
+    //     {
+    //         cumulativeRate = 0;
+    //     }
 
-        if(count >= 200)
-        {
-            cumulativeRate /= count;
-        }
-    }
+    //     if(count >= 200)
+    //     {
+    //         cumulativeRate /= count;
+    //     }
+    // }
 
-    return cumulativeRate;
+    // return cumulativeRate;
 }
 
 void setup()
 {
-    Serial.begin(9600);               // begin serial for debug - this is used in other init functions to give current status
-    //rtc.init();                         // init the rtc
+    Serial.begin(115200);               // begin serial for debug - this is used in other init functions to give current status
+    rtc.init();                         // init the rtc
     btComms.init();                     // init the bt comms
     display.init();                     // init the display - note this also runs multiple test functions
     gps.init();
@@ -107,7 +107,8 @@ void loop()
             display.showGpsData(gps.getLatitude(), gps.getLongitude(), gps.getAltitude(), gps.getDistance());
         }
         display.showGpsSignal(gps.isValid());
-
+        display.showSteps(50);
+        display.showHR(76);
     }
     
     gps.loop();     // poll the gps
@@ -115,28 +116,4 @@ void loop()
 
     btComms.read();
     btComms.write();
-    // display.increment();
-
-    // Serial.print("Heartrate val: ");    // read heartrate and print to console
-    // Serial.println(analogRead(HEARTRATE_PIN));
-    //DateTime now = rtc.get();
-    //heartSense.getValue(HEARTRATE_PIN);
-   // uint16_t val = analogRead(HEARTRATE_PIN);
-    uint8_t bpmValue = StabiliseRate();
-    //Serial.print("Analogue: ");
-    //Serial.println(val);
-    if(bpmValue)
-    {
-        Serial.print("Overall BPM: ");
-        Serial.println(bpmValue);
-    }
-    else
-    {
-        Serial.println("Sensor has no signal");
-    }
-   
-   // display.showTime(now);
-    
-   //btComms.read();
-   //btComms.write();
 }
