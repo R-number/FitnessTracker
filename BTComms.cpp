@@ -39,7 +39,7 @@ void BTComms::read()
 
 void BTComms::write()
 {
-        if(Serial.available())
+    if(Serial.available())
     {
         m_BT.write(Serial.read());  // read whatever is coming from Serial and write to BT
     }
