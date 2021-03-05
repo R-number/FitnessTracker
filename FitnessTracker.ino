@@ -53,7 +53,31 @@ uint8_t StabiliseRate()
         return cumulativeRate/(BUFFER_SAMPLES-ThrownRate);
     }
     else
-        return 0;           
+        return 0;
+
+
+    if(millis() - deltaTime > 20)
+    {
+        heartSense.getValue(HEARTRATE_PIN);
+        uint8_t bpm = heartSense.getRate();
+
+        if(bpm)
+        {
+            cumulativeRate += bpm;
+            count++;
+        }
+        else
+        {
+            cumulativeRate = 0;
+        }
+
+        if(count >= 200)
+        {
+            cumulativeRate /= count;
+        }
+    }
+
+    return cumulativeRate;
 }
 
 void setup()
