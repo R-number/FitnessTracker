@@ -7,10 +7,16 @@
                 "/Users/Marcus/Library/Arduino15/packages/arduino/tools/**",
                 "/Users/Marcus/Programming/Arduino/libraries/**",
                 "/Applications/Arduino.app/Contents/Java/libraries/**",
-                "/Users/Marcus/Library/Arduino15/packages/arduino/hardware/sam/1.6.12/**"
+                "/Users/Marcus/Library/Arduino15/packages/arduino/hardware/sam/1.6.12/**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\tools\\**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                "C:\\Users\\lolit\\Documents\\Arduino\\libraries\\**",
+                "C:\\Program Files (x86)\\Arduino\\tools\\**"
             ],
             "forcedInclude": [
-                "/Users/Marcus/Library/Arduino15/packages/arduino/hardware/sam/1.6.12/cores/arduino/Arduino.h"
+                "/Users/Marcus/Library/Arduino15/packages/arduino/hardware/sam/1.6.12/cores/arduino/Arduino.h",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
                 "USBCON"
@@ -23,6 +29,22 @@
             "compilerPath": "/usr/local/bin/gcc-10",
             "cStandard": "gnu17",
             "cppStandard": "gnu++14"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Program Files (x86)\\Arduino\\tools\\**",
+                "C:\\Users\\lolit\\Documents\\Arduino\\libraries\\**",
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\tools\\**",
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**"
+            ],
+            "forcedInclude": [
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ],
+            "defines": [
+                "USBCON"
+            ]
         }
     ],
     "version": 4
