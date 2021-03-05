@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include "Display.h"
 #include <SPI.h>
-#include <EEPROM.h>
+// #include <EEPROM.h>
 #include <SparkFun_ADXL345.h>
 
 //DSRtc rtc;
@@ -26,7 +26,7 @@ const int tap_duration = 150;      // 625 μs per increment (duration of tap)
 
 unsigned int step_number = 0;      // Total step count initialised at 0
 
-ADXL345 adxl = ADXL345(chip_select_pin);
+ADXL345 adxl = ADXL345();//chip_select_pin);
 //int ADXL345 = 0x53;
 
 void setup()
@@ -36,7 +36,7 @@ void setup()
   //btComms.init();         //init the bt comms
   //display.init();           //init the display - note this also runs multiple test functions
 
-  EEPROM.put(eeprom_address, 0);        // Reset the step count in eeprom
+  // EEPROM.put(eeprom_address, 0);        // Reset the step count in eeprom
 
   adxl.powerOn();                       // Start the accelerometer
   adxl.setRangeSetting(range_setting);
@@ -79,7 +79,7 @@ void loop()
     digitalWrite(led_pin, LOW);
     delay(100);
 
-    EEPROM.put(eeprom_address, step_number++);
+    // EEPROM.put(eeprom_address, step_number++);
     Serial.print("Steps: ");
     Serial.println(step_number);
   }
