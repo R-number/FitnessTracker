@@ -123,14 +123,14 @@ void Display::showTime(DateTime &t)
     if(((t - oldTime).seconds() == 0) && (oldTime != t))
     {
         /* we get here if they are different */
-        m_oled.setTextSize(2);
+        m_oled.setTextSize(3);
 
-        m_oled.setCursor(2, 10);
+        m_oled.setCursor(2, 15);
         m_oled.setTextColor(BLACK);     // print the old string in the bg colour
         formatTime(buf, oldTime.hour(), oldTime.minute());
         m_oled.print(buf);              // this will erase the old time
 
-        m_oled.setCursor(2, 10);        // reset the cursor
+        m_oled.setCursor(2, 15);        // reset the cursor
         m_oled.setTextColor(RED);
         formatTime(buf, t.hour(), t.minute());
         m_oled.print(buf);              // print the current buffer
@@ -153,10 +153,52 @@ void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the 
     }
 }
 
+void Display::showSteps(uint16_t steps)
+{
+    static uint16_t oldSteps = 0;
+
+    m_oled.drawBitmap(2, 90, shoeLogo, 24, 24, WHITE);
+
+    if(oldSteps != steps)
+    {
+        oldSteps = steps;
+        m_oled.setTextSize(2);
+
+        m_oled.setCursor(60, 95);
+        m_oled.setTextColor(BLACK);
+        m_oled.print(oldSteps, DEC);
+
+        m_oled.setCursor(60, 95);
+        m_oled.setTextColor(BLUE);
+        m_oled.print(steps, DEC);
+    }
+}
+
+void Display::showHR(uint8_t bpm)
+{
+    static uint16_t oldBPM = 0;
+
+    m_oled.drawBitmap(2, 50, heartLogo, 24, 24, RED);
+
+    if(oldBPM != bpm)
+    {
+        oldBPM = bpm;
+        m_oled.setTextSize(2);
+
+        m_oled.setCursor(60, 55);
+        m_oled.setTextColor(BLACK);
+        m_oled.print(oldBPM, DEC);
+
+        m_oled.setCursor(60, 55);
+        m_oled.setTextColor(BLUE);
+        m_oled.print(bpm, DEC);
+    }
+}
+
 void Display::showGpsSignal(bool show)
 {
     m_oled.setTextSize(1);
-    m_oled.setCursor(100, 5);
+    m_oled.setCursor(110, 5);
     if(show)
     {
         m_oled.setTextColor(GREEN);
