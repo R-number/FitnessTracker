@@ -155,7 +155,7 @@ void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the 
 
 void Display::showSteps(uint16_t steps)
 {
-    static uint16_t oldSteps = 0;
+    static uint16_t oldSteps = 1;
 
     m_oled.drawBitmap(2, 90, shoeLogo, 24, 24, WHITE);
 
@@ -177,7 +177,7 @@ void Display::showSteps(uint16_t steps)
 
 void Display::showHR(uint8_t bpm)
 {
-    static uint16_t oldBPM = 0;
+    static uint16_t oldBPM = 1;
 
     m_oled.drawBitmap(2, 50, heartLogo, 24, 24, RED);
 
