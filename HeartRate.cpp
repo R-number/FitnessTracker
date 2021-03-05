@@ -10,7 +10,7 @@ File name:      HeartRate.cpp
 #define BUFFER_SAMPLES   200
 
 HeartRate::HeartRate()
-    : m_BPM(0)
+    : m_BPM(0), m_heartSense(DFRobot_Heartrate(DIGITAL_MODE))
 {
     /* empty constructor */
 }
@@ -22,12 +22,23 @@ void HeartRate::init()
 
 void HeartRate::loop()
 {
+    uint8_t tempBPM;
 
+    m_heartSense.getValue(HEARTRATE_PIN);
+    tempBPM = m_heartSense.getRate();
+
+    if(tempBPM)
+    {
+        m_BPM = tempBPM;
+        Serial.println(m_BPM);
+    }
+    delay(20);
 }
 
 /* needs to be integrated */
 
 
+/*
 uint8_t StabiliseRate()
 {
     uint8_t rateBuffer=0, idle=0 ,ThrownRate=0;
@@ -83,3 +94,4 @@ uint8_t StabiliseRate()
 
     // return cumulativeRate;
 }
+*/

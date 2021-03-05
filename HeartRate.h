@@ -6,7 +6,7 @@ File name:      HeartRate.h
 
 #pragma once
 
-#include <DFRobot_Heartrate.h>
+#include "DFRobot_Heartrate.h"
 
 class HeartRate
 {
@@ -16,9 +16,9 @@ public:
     void init();
     void loop();
 
-    void get() const { return m_BPM; }
+    uint8_t get() const { return m_BPM; }
 
 private:
     uint8_t m_BPM;
-    DFRobot_Heartrate m_heartSense(DIGITAL_MODE);
+    DFRobot_Heartrate m_heartSense;
 };
