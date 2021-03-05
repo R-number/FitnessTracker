@@ -161,7 +161,6 @@ void Display::showSteps(uint16_t steps)
 
     if(oldSteps != steps)
     {
-        oldSteps = steps;
         m_oled.setTextSize(2);
 
         m_oled.setCursor(60, 95);
@@ -171,6 +170,8 @@ void Display::showSteps(uint16_t steps)
         m_oled.setCursor(60, 95);
         m_oled.setTextColor(BLUE);
         m_oled.print(steps, DEC);
+
+        oldSteps = steps;
     }
 }
 
@@ -182,7 +183,6 @@ void Display::showHR(uint8_t bpm)
 
     if(oldBPM != bpm)
     {
-        oldBPM = bpm;
         m_oled.setTextSize(2);
 
         m_oled.setCursor(60, 55);
@@ -192,6 +192,8 @@ void Display::showHR(uint8_t bpm)
         m_oled.setCursor(60, 55);
         m_oled.setTextColor(BLUE);
         m_oled.print(bpm, DEC);
+
+        oldBPM = bpm;
     }
 }
 
