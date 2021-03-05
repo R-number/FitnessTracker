@@ -44,3 +44,21 @@ void BTComms::write()
         m_BT.write(Serial.read());  // read whatever is coming from Serial and write to BT
     }
 }
+
+char BTComms::hexToAscii(uint8_t d)
+{
+	if(d < 10)
+		d += '0';
+	else
+		d += ('A' - 10);
+	return d;
+}
+
+uint8_t BTComms::asciiToHex(char c)
+{
+	if(c > '9')
+		c -= ('A' - 10);
+	else
+		c -= '0';
+	return c;
+}
