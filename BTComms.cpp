@@ -9,8 +9,12 @@
 #define STATUS_PIN  27
 #define EN_PIN      28
 
-BTComms::BTComms(HardwareSerial &BTSerialPort)
-    :m_BT(BTSerialPort)
+#define DEBUG_SERIAL        // comment out to stop debug serial prints
+
+BTComms::BTComms(HardwareSerial &BTSerialPort, DSRtc &rtcRef, 
+                GPS &gpsRef, StepCount &scRef, HeartRate &hrRef)
+    :m_BT(BTSerialPort), m_rxLen(0), m_rtcRef(rtcRef), m_gpsRef(gpsRef),
+    m_scRef(scRef), m_hrRef(hrRef)
 {
     /* empty constructor */
 }
@@ -31,9 +35,85 @@ void BTComms::status()
 
 void BTComms::read()
 {
-    if(m_BT.available())
+    bool newData = false;
+
+    while(m_BT.available() > 0)
     {
-        Serial.write(m_BT.read());  // read whatever is incoming from BT and write to debug serial port
+        m_rxLen = m_BT.readBytesUntil('Z', m_rxBuf, 1024);
+        m_BT.read();    // read until the terminator then clear the buffer (we ignore anything else thats in there)
+        newData = true;
+    }
+
+    if(newData)
+    {
+        Serial.print("Rxlen: ");
+        Serial.println(m_rxLen);
+
+        #ifdef DEBUG_SERIAL
+        for(uint16_t i=0; i<m_rxLen; i++)
+        {
+            Serial.println(m_rxBuf[i]);
+        }
+        #endif
+
+        parse();
+    }
+}
+
+void BTComms::parse()
+{
+    nibbles32_t tempTime = {0};
+    nibbles16_t tempDist = {0}, tempHR = {0}, tempSteps = {0};
+
+    switch(m_rxBuf[0])
+    {
+        case 'T':
+            tempTime.NIBBLE7 = asciiToHex(m_rxBuf[1]);
+            tempTime.NIBBLE6 = asciiToHex(m_rxBuf[2]);
+            tempTime.NIBBLE5 = asciiToHex(m_rxBuf[3]);
+            tempTime.NIBBLE4 = asciiToHex(m_rxBuf[4]);
+            tempTime.NIBBLE3 = asciiToHex(m_rxBuf[5]);
+            tempTime.NIBBLE2 = asciiToHex(m_rxBuf[6]);
+            tempTime.NIBBLE1 = asciiToHex(m_rxBuf[7]);
+            tempTime.NIBBLE0 = asciiToHex(m_rxBuf[8]);
+
+            m_rtcRef.set(tempTime.VAL);                 // set the time
+            m_BT.write("TZ\n");                         // reply to verify we recieved the time
+            break;
+        
+        case 'D':
+            tempDist = {.VAL = m_gpsRef.getDistance()*1000};
+            m_BT.write("D");
+            m_BT.write(hexToAscii(tempDist.NIBBLE3));
+            m_BT.write(hexToAscii(tempDist.NIBBLE2));
+            m_BT.write(hexToAscii(tempDist.NIBBLE1));
+            m_BT.write(hexToAscii(tempDist.NIBBLE0));
+            m_BT.write("Z\n");
+            break;
+
+        case 'H':
+            tempHR = {.VAL = m_hrRef.get()};
+            m_BT.write("H");
+            m_BT.write(hexToAscii(tempHR.NIBBLE3));
+            m_BT.write(hexToAscii(tempHR.NIBBLE2));
+            m_BT.write(hexToAscii(tempHR.NIBBLE1));
+            m_BT.write(hexToAscii(tempHR.NIBBLE0));
+            m_BT.write("Z\n");
+            break;
+        
+        case 'S':
+            tempSteps = {.VAL = m_scRef.get()};
+            m_BT.write("S");
+            m_BT.write(hexToAscii(tempSteps.NIBBLE3));
+            m_BT.write(hexToAscii(tempSteps.NIBBLE2));
+            m_BT.write(hexToAscii(tempSteps.NIBBLE1));
+            m_BT.write(hexToAscii(tempSteps.NIBBLE0));
+            m_BT.write("Z\n");
+            break;
+        
+        default:
+            Serial.println("Error, unidenfitied message received!");
+            break;
     }
 }
 
