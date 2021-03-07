@@ -19,6 +19,9 @@ public:
     uint8_t get() const { return m_BPM; }
 
 private:
+    uint8_t stabilise();
+
+private:
     uint8_t m_BPM;
     DFRobot_Heartrate m_heartSense;
 };

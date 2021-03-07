@@ -7,7 +7,9 @@ File name:      HeartRate.cpp
 #include "HeartRate.h"
 
 #define HEARTRATE_PIN   A0
-#define BUFFER_SAMPLES   200
+#define BUFFER_SAMPLES   500
+#define DEBUG_SERIAL
+
 
 HeartRate::HeartRate()
     : m_BPM(0), m_heartSense(DFRobot_Heartrate(DIGITAL_MODE))
@@ -17,81 +19,120 @@ HeartRate::HeartRate()
 
 void HeartRate::init()
 {
-
+    /* nothing to init... */
 }
 
 void HeartRate::loop()
 {
-    uint8_t tempBPM;
+    uint8_t tempBPM = stabilise();
+    static uint32_t count = 0, deltaTime = 0;
 
-    m_heartSense.getValue(HEARTRATE_PIN);
-    tempBPM = m_heartSense.getRate();
-
-    if(tempBPM)
+    if(tempBPM)                 // if we get a non-zero bpm value
     {
-        m_BPM = tempBPM;
-        Serial.println(m_BPM);
+        m_BPM = tempBPM;         // save it 
+        count = 0;              // reset the count
     }
-    delay(20);
+    else if(millis() - deltaTime > 1000)    // every second
+    {
+        deltaTime = millis();
+        count++;                // increase the count if we get 0 bpm value
+    }
+
+    if(count >= 30)             // if still zero after 30 seconds
+    {
+        m_BPM = 0;              // reset the bpm
+    }
 }
 
-/* needs to be integrated */
 
-
-/*
-uint8_t StabiliseRate()
+uint8_t HeartRate::stabilise()
 {
-    uint8_t rateBuffer=0, idle=0 ,ThrownRate=0;
-    heartSense.getValue(HEARTRATE_PIN);
-    uint16_t cumulativeRate=0;    
-    while(rateBuffer<BUFFER_SAMPLES)
+    static uint32_t deltaTime = 0;
+    static uint16_t rateBuffer = 0, idle = 0 , ThrownRate = 0, SucessRate = 0;          //Remove Thrown Rate once the system is working
+    static uint16_t cumulativeRate = 0;
+    uint8_t bpm = 0;
+
+    if(millis()-deltaTime>20)
     {
-        uint8_t bpm =heartSense.getRate();
-        if (bpm)
+        deltaTime = millis();
+        m_heartSense.getValue(HEARTRATE_PIN);
+        bpm = m_heartSense.getRate();
+        if(rateBuffer < BUFFER_SAMPLES) 
         {
-            Serial.print(rateBuffer);
-            Serial.print(" BPM: ");
-            Serial.println(bpm);
-            idle=0;
-            cumulativeRate+=bpm;            
-        }
-        else
-        {
-            idle++;
-            ThrownRate++;
+            if (bpm)
+            {
+                SucessRate++;
+                #ifdef DEBUG_SERIAL
+                //Serial.print(" Delta time: ");
+                //Serial.print(deltaTime);
+                Serial.print(" Number of Measurements: ");
+                Serial.print(rateBuffer);
+                Serial.print(" ,Number of Idles: ");
+                Serial.print(idle);
+                Serial.print(" ,Number of Thrown  Measurements: ");
+                Serial.print(ThrownRate);
+                Serial.print(" ,Number of Successful  Measurements: ");
+                Serial.print(SucessRate);
+                Serial.print(" ,Number of Cumulative  Measurements: ");
+                Serial.print(cumulativeRate);
+                Serial.print(" ,BPM: ");
+                Serial.println(bpm);
+                #endif
+
+                idle=0;
+                cumulativeRate += bpm;    
+                       
+            }
+            else
+            {
+                #ifdef DEBUG_SERIAL
+                //Serial.print(" Delta time: ");
+                //Serial.print(deltaTime);
+                Serial.print(" Number of Measurements: ");
+                Serial.print(rateBuffer);
+                Serial.print(" ,Number of Idles: ");
+                Serial.print(idle);
+                Serial.print(" ,Number of Thrown  Measurements: ");
+                Serial.print(ThrownRate);
+                Serial.print(" ,Number of Successful  Measurements: ");
+                Serial.print(SucessRate);
+                Serial.print(" ,Number of Cumulative  Measurements: ");
+                Serial.print(cumulativeRate);
+                Serial.print(" ,BPM: ");
+                Serial.println(bpm);
+                #endif
+
+                idle++;
+                ThrownRate++;
+            }             
+            rateBuffer++; 
         } 
-        rateBuffer++;
-        delay(20);
-    } 
-    if (idle<80)
-    {
-        return cumulativeRate/(BUFFER_SAMPLES-ThrownRate);
     }
     else
+    {
+        #ifdef DEBUG_SERIAL
+        Serial.println("Waiting for delay");
+        #endif
+    }
+    
+    if(rateBuffer==BUFFER_SAMPLES)
+    {
+        #ifdef DEBUG_SERIAL
+        Serial.println("Buffer reset");
+        #endif
+        rateBuffer=0;
+        idle=0;
+        ThrownRate=0;
+        SucessRate=0;
+        cumulativeRate=0;
+    }
+
+    if (idle < 0.05*BUFFER_SAMPLES && SucessRate >= 5)
+    {
+        return cumulativeRate/SucessRate;
+    }
+    else
+    {
         return 0;
-
-
-    // if(millis() - deltaTime > 20)
-    // {
-    //     heartSense.getValue(HEARTRATE_PIN);
-    //     uint8_t bpm = heartSense.getRate();
-
-    //     if(bpm)
-    //     {
-    //         cumulativeRate += bpm;
-    //         count++;
-    //     }
-    //     else
-    //     {
-    //         cumulativeRate = 0;
-    //     }
-
-    //     if(count >= 200)
-    //     {
-    //         cumulativeRate /= count;
-    //     }
-    // }
-
-    // return cumulativeRate;
+    }      
 }
-*/
