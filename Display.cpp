@@ -120,7 +120,7 @@ void Display::showTime(DateTime &t)
     static DateTime oldTime;    // note, may have to wait 1 min for initial update
     char buf[20] = {0};
 
-    if(((t - oldTime).seconds() == 0) && (oldTime != t))
+    if(((t - oldTime).totalseconds() >= 59))      // if the difference in times is greater than a minute
     {
         /* we get here if they are different */
         m_oled.setTextSize(3);
