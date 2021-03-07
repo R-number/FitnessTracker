@@ -8,7 +8,7 @@ File name:      HeartRate.cpp
 
 #define HEARTRATE_PIN   A0
 #define BUFFER_SAMPLES   500
-#define DEBUG_SERIAL
+// #define DEBUG_SERIAL
 
 
 HeartRate::HeartRate()
@@ -127,7 +127,7 @@ uint8_t HeartRate::stabilise()
         cumulativeRate=0;
     }
 
-    if (idle < 0.05*BUFFER_SAMPLES && SucessRate >= 5)
+    if (idle < 0.05*BUFFER_SAMPLES && SucessRate >= 10)
     {
         return cumulativeRate/SucessRate;
     }
