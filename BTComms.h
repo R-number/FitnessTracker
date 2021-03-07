@@ -51,6 +51,7 @@ public:
 
     void init();
     void status();
+    void loop();
     void read();
     void write();
 

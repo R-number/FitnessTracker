@@ -33,7 +33,7 @@ void BTComms::status()
     digitalWrite(LED_BUILTIN, digitalRead(STATUS_PIN));  // set the led based on the HC-05 current status
 }
 
-void BTComms::read()
+void BTComms::loop()
 {
     bool newData = false;
 
@@ -57,6 +57,22 @@ void BTComms::read()
         #endif
 
         parse();
+    }
+}
+
+void BTComms::read()
+{
+    if(m_BT.available() > 0)
+    {
+        Serial.write(Serial.read());
+    }
+}
+
+void BTComms::write()
+{
+    if(Serial.available() > 0)
+    {
+        m_BT.write(Serial.read());  // read whatever is coming from Serial and write to BT
     }
 }
 
@@ -114,14 +130,6 @@ void BTComms::parse()
         default:
             Serial.println("Error, unidenfitied message received!");
             break;
-    }
-}
-
-void BTComms::write()
-{
-    if(Serial.available())
-    {
-        m_BT.write(Serial.read());  // read whatever is coming from Serial and write to BT
     }
 }
 

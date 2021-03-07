@@ -53,11 +53,10 @@ void loop()
         display.showHR(heartRate.get());
     }
     
-    gps.loop();         // poll the gps
+    /* poll all the modules to keep data updated */
+    gps.loop();
     stepCount.loop();
     heartRate.loop();
-
-    btComms.read();
-    // btComms.write();
+    btComms.loop();
 }
 
