@@ -23,8 +23,8 @@ void DSRtc::init()
     Serial.println("init RTC");
 
     /* debug only (would request this from bt connected phone) */
-    m_rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));    // set date time to compile date & time
-    print(get());
+    m_rtc.adjust(DateTime());    // set date time to compile date & time
+    // print(get());
 }
 
 DateTime DSRtc::get() const
@@ -35,6 +35,11 @@ DateTime DSRtc::get() const
 void DSRtc::set(DateTime &t)
 {
     m_rtc.adjust(t);
+}
+
+void DSRtc::set(uint32_t timeStamp)
+{
+    m_rtc.adjust(DateTime(timeStamp));
 }
 
 void DSRtc::print(const DateTime &t)
