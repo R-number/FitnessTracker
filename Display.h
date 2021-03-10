@@ -73,6 +73,7 @@ public:
     void monitorTimeout(DateTime &t, uint16_t timeoutTime);
     void showSteps(uint16_t steps);
     void showHR(uint8_t bpm);
+    void showGps(bool valid, float dist);
 
     void showGpsSignal(bool show);
     void showGpsData(float lat, float lng);

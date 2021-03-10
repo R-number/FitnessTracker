@@ -119,19 +119,20 @@ void Display::showTime(DateTime &t)
 {
     static DateTime oldTime;    // note, may have to wait 1 min for initial update
     char buf[20] = {0};
+    const uint8_t x = 20, y = 10;
 
     if(((t - oldTime).totalseconds() >= 59))      // if the difference in times is greater than a minute
     {
         /* we get here if they are different */
         m_oled.setTextSize(3);
 
-        m_oled.setCursor(2, 15);
+        m_oled.setCursor(x, y);
         m_oled.setTextColor(BLACK);     // print the old string in the bg colour
         formatTime(buf, oldTime.hour(), oldTime.minute());
         m_oled.print(buf);              // this will erase the old time
 
-        m_oled.setCursor(2, 15);        // reset the cursor
-        m_oled.setTextColor(RED);
+        m_oled.setCursor(x, y);        // reset the cursor
+        m_oled.setTextColor(WHITE);
         formatTime(buf, t.hour(), t.minute());
         m_oled.print(buf);              // print the current buffer
 
@@ -156,18 +157,19 @@ void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the 
 void Display::showSteps(uint16_t steps)
 {
     static uint16_t oldSteps = 1;
+    const uint8_t x = 20, y = 70;
 
-    m_oled.drawBitmap(2, 90, shoeLogo, 24, 24, WHITE);
+    m_oled.drawBitmap(x, y, shoeLogo, 24, 24, WHITE);
 
     if(oldSteps != steps)
     {
         m_oled.setTextSize(2);
 
-        m_oled.setCursor(60, 95);
+        m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLACK);
         m_oled.print(oldSteps, DEC);
 
-        m_oled.setCursor(60, 95);
+        m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLUE);
         m_oled.print(steps, DEC);
 
@@ -178,22 +180,53 @@ void Display::showSteps(uint16_t steps)
 void Display::showHR(uint8_t bpm)
 {
     static uint16_t oldBPM = 1;
+    const uint8_t x = 20, y = 40;
 
-    m_oled.drawBitmap(2, 50, heartLogo, 24, 24, RED);
+    m_oled.drawBitmap(x, y, heartLogo, 24, 24, RED);
 
     if(oldBPM != bpm)
     {
         m_oled.setTextSize(2);
 
-        m_oled.setCursor(60, 55);
+        m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLACK);
         m_oled.print(oldBPM, DEC);
 
-        m_oled.setCursor(60, 55);
+        m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLUE);
         m_oled.print(bpm, DEC);
 
         oldBPM = bpm;
+    }
+}
+
+void Display::showGps(bool valid, float dist)
+{
+    static float oldDist = 1.0;
+    const uint8_t x = 20, y = 100;
+
+    if(valid)
+    {
+        m_oled.drawBitmap(x, y, locationLogo, 24, 24, GREEN);
+    }
+    else
+    {
+        m_oled.drawBitmap(x, y, locationLogo, 24, 24, RED);
+    }
+
+    if(oldDist != dist)
+    {
+        m_oled.setTextSize(2);
+
+        m_oled.setCursor(x+40, y+5);
+        m_oled.setTextColor(BLACK);
+        m_oled.print(oldDist);
+
+        m_oled.setCursor(x+40, y+5);
+        m_oled.setTextColor(BLUE);
+        m_oled.print(dist);
+
+        oldDist = dist;
     }
 }
 

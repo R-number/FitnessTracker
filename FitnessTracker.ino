@@ -44,11 +44,7 @@ void loop()
         currentDT = rtc.get();
         display.showTime(currentDT);
         // display.monitorTimeout(currentDT, 2*60);      // timeout after n mins
-        if(gps.isValid())
-        {
-            display.showGpsData(gps.getLatitude(), gps.getLongitude(), gps.getAltitude(), gps.getDistance());
-        }
-        display.showGpsSignal(gps.isValid());
+        display.showGps(gps.isValid(), gps.getDistance());
         display.showSteps(stepCount.get());
         display.showHR(heartRate.get());
     }
