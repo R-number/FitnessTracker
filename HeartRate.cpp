@@ -127,7 +127,7 @@ uint8_t HeartRate::stabilise()
         cumulativeRate=0;
     }
 
-    if (idle < 0.05*BUFFER_SAMPLES && SucessRate >= 10)
+    if (idle < 0.05*BUFFER_SAMPLES && SucessRate >= 5)
     {
         return cumulativeRate/SucessRate;
     }
