@@ -66,6 +66,7 @@ class Display
 {
 public:
     Display();
+    
     void init();
     void increment();
 
