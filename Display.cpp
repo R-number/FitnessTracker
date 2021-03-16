@@ -7,8 +7,8 @@ File name:      Lcd.cpp
 #include "Display.h"
 #include "bitmaps.h"
 
-// #define RUN_TEST 
-// #define DEBUG_SERIAL        // note local only to this file
+// #define RUN_TEST             // comment this in to run the test routines
+// #define DEBUG_SERIAL         // comment this in to enable Serial debug prints
 
 float p = 3.1415926;
 
@@ -17,7 +17,7 @@ Display::Display()
     /* empty constructor */
 }
 
-void Display::init() // the following code was taken from test.ino for the oled graphics library
+void Display::init() 
 {                    // run this init to test all the features
     m_oled.begin();
     Serial.println("init display");
@@ -30,7 +30,7 @@ void Display::init() // the following code was taken from test.ino for the oled 
     // for rendering the test pattern talks directly to the display and
     // ignores any rotation.
 
-#ifdef RUN_TEST
+#ifdef RUN_TEST // the following code was taken from test.ino for the oled graphics library
     uint16_t time = millis();
     m_oled.fillRect(0, 0, 128, 128, BLACK);
     time = millis() - time;
@@ -97,7 +97,11 @@ void Display::init() // the following code was taken from test.ino for the oled 
     Serial.println("done");
 }
 
-void Display::increment()
+/* 
+note the increment function was only used for testing and measuring the SCK
+frequency and is not used in the final code 
+*/
+void Display::increment()           
 {
     static int oldMilis = 0, count = 0;
 
@@ -134,7 +138,7 @@ void Display::showTime(DateTime &t)
         m_oled.setCursor(x, y);        // reset the cursor
         m_oled.setTextColor(WHITE);
         formatTime(buf, t.hour(), t.minute());
-        m_oled.print(buf);              // print the current buffer
+        m_oled.print(buf);              // print the current time string
 
     #ifdef DEBUG_SERIAL
         Serial.println(buf);
@@ -144,13 +148,14 @@ void Display::showTime(DateTime &t)
     }
 }
 
-void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) // turns of the display after "timeoutTime" number of seconds
+/* turns of the display after "timeoutTime" number of seconds */
+void Display::monitorTimeout(DateTime &t, uint16_t timeoutTime) 
 {                                                               // use to avoid screen burn in
     static DateTime oldTime = t;
 
-    if((t-oldTime).totalseconds() > timeoutTime)
+    if((t-oldTime).totalseconds() > timeoutTime)                // if we reach the timeout time...
     {
-        m_oled.enableDisplay(false);
+        m_oled.enableDisplay(false);                            // disable the display
     }
 }
 
@@ -161,18 +166,21 @@ void Display::showSteps(uint16_t steps)
 
     m_oled.drawBitmap(x, y, shoeLogo, 24, 24, WHITE);
 
-    if(oldSteps != steps)
+    if(oldSteps != steps)           // if theres been a change in no. of steps
     {
         m_oled.setTextSize(2);
 
+        /* draw old stuff in black to erase */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLACK);
         m_oled.print(oldSteps, DEC);
 
+        /* re draw new stuff in red over the top */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLUE);
         m_oled.print(steps, DEC);
 
+        /* update the old variables */
         oldSteps = steps;
     }
 }
@@ -182,20 +190,23 @@ void Display::showHR(uint8_t bpm)
     static uint16_t oldBPM = 1;
     const uint8_t x = 20, y = 40;
 
-    m_oled.drawBitmap(x, y, heartLogo, 24, 24, RED);
+    m_oled.drawBitmap(x, y, heartLogo, 24, 24, RED);        // draw the heart logo
 
-    if(oldBPM != bpm)
+    if(oldBPM != bpm)           // if theres been a change in bpm
     {
         m_oled.setTextSize(2);
 
+        /* draw old stuff in black to erase */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLACK);
         m_oled.print(oldBPM, DEC);
 
+        /* re draw new stuff in red over the top */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLUE);
         m_oled.print(bpm, DEC);
 
+        /* update the old variables */
         oldBPM = bpm;
     }
 }
@@ -205,32 +216,36 @@ void Display::showGps(bool valid, float dist)
     static float oldDist = 1.0;
     const uint8_t x = 20, y = 100;
 
-    if(valid)
-    {
+    if(valid)           // if we have gps signal... 
+    {                   // show a green logo
         m_oled.drawBitmap(x, y, locationLogo, 24, 24, GREEN);
     }
     else
-    {
+    {                   // show red logo
         m_oled.drawBitmap(x, y, locationLogo, 24, 24, RED);
     }
 
-    if(oldDist != dist)
+    if(oldDist != dist)     // if theres been a change in distance
     {
         m_oled.setTextSize(2);
 
+        /* draw old stuff in black to erase */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLACK);
         m_oled.print(oldDist);
 
+        /* re draw new stuff in red over the top */
         m_oled.setCursor(x+40, y+5);
         m_oled.setTextColor(BLUE);
         m_oled.print(dist);
 
+        /* update the old variables */
         oldDist = dist;
     }
 }
 
-void Display::showGpsSignal(bool show)
+
+void Display::showGpsSignal(bool show)      // debug only
 {
     m_oled.setTextSize(1);
     m_oled.setCursor(110, 5);
@@ -245,7 +260,7 @@ void Display::showGpsSignal(bool show)
     m_oled.print("GPS");
 }
 
-void Display::showGpsData(float lat, float lng)
+void Display::showGpsData(float lat, float lng)     // debug only
 {
     static float oldLat, oldLong;
 
@@ -259,6 +274,7 @@ void Display::showGpsData(float lat, float lng)
     m_oled.print("Lng: ");
     m_oled.println(oldLong);    
 
+    /* re draw new stuff in red over the top */
     m_oled.setCursor(0, 40);
     m_oled.setTextColor(RED);
     m_oled.print("Lat: ");
@@ -266,11 +282,12 @@ void Display::showGpsData(float lat, float lng)
     m_oled.print("Lng: ");
     m_oled.println(lng);
 
+    /* update the old variables */
     oldLat = lat;
     oldLong = lng;
 }
 
-void Display::showGpsData(float lat, float lng, float alt)
+void Display::showGpsData(float lat, float lng, float alt)      // debug only
 {
     static float oldLat, oldLong, oldAlt;
 
@@ -286,6 +303,7 @@ void Display::showGpsData(float lat, float lng, float alt)
     m_oled.print("Alt: ");
     m_oled.println(oldAlt);        
 
+    /* re draw new stuff in red over the top */
     m_oled.setCursor(0, 40);
     m_oled.setTextColor(RED);
     m_oled.print("Lat: ");
@@ -295,12 +313,14 @@ void Display::showGpsData(float lat, float lng, float alt)
     m_oled.print("Alt: ");
     m_oled.println(alt);
 
+    /* update the old variables */
     oldLat = lat;
     oldLong = lng;
     oldAlt = alt;    
 }
 
-void Display::showGpsData(float lat, float lng, float alt, float dist)
+void Display::showGpsData(float lat, float lng, 
+                          float alt, float dist)      // debug only
 {
     static float oldLat, oldLong, oldAlt, oldDist;
 
@@ -318,6 +338,7 @@ void Display::showGpsData(float lat, float lng, float alt, float dist)
     m_oled.print("Dst: ");
     m_oled.println(oldDist);        
 
+    /* re draw new stuff in red over the top */
     m_oled.setCursor(0, 40);
     m_oled.setTextColor(RED);
     m_oled.print("Lat: ");
@@ -329,11 +350,25 @@ void Display::showGpsData(float lat, float lng, float alt, float dist)
     m_oled.print("Dst: ");
     m_oled.println(dist); 
 
+    /* update the old variables */
     oldLat = lat;
     oldLong = lng;
     oldAlt = alt;  
     oldDist = dist;   
 }
+
+/* Helper functions to format the time strings */
+void Display::formatTime(char buf[], uint8_t h, uint8_t m)
+{
+    sprintf(buf, "%02u:%02u", h, m);        // format hours and mins
+}
+
+void Display::formatTime(char buf[], uint8_t h, uint8_t m, uint8_t s)
+{
+    sprintf(buf, "%02u:%02u:%02u", h, m, s);    // format hours, mins, secs
+}
+
+/* from here below are test routines taken from the Adafruit SSD1351 test.ino sketch */
 
 void Display::testLines(uint16_t color)
 {
@@ -525,14 +560,4 @@ void Display::testPattern()
         m_oled.fillRect(0, m_oled.height() * c / 8, m_oled.width(), m_oled.height() / 8,
                         pgm_read_word(&colors[c]));
     }
-}
-
-void Display::formatTime(char buf[], uint8_t h, uint8_t m)
-{
-    sprintf(buf, "%02u:%02u", h, m);
-}
-
-void Display::formatTime(char buf[], uint8_t h, uint8_t m, uint8_t s)
-{
-    sprintf(buf, "%02u:%02u:%02u", h, m, s);
 }
