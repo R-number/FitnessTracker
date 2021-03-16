@@ -106,12 +106,12 @@ void Display::increment()
     static int oldMilis = 0, count = 0;
 
     m_oled.setCursor(1, 1);
-    // if((millis() - oldMilis) > 2000)
-    // {
-    //     oldMilis = millis();
-    //     count ++;
-    //     m_oled.fillScreen(BLACK);
-    // }
+    if((millis() - oldMilis) > 2000)
+    {
+        oldMilis = millis();
+        count ++;
+        m_oled.fillScreen(BLACK);
+    }
     m_oled.setTextColor(RED);
     m_oled.setTextSize(1);
     m_oled.print("Count: ");        // print every loop to catch spi on scope
