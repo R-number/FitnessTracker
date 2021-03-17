@@ -42,6 +42,13 @@ void loop()
         digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
         deltaTime = millis();
         currentDT = rtc.get();
+
+        if(currentDT.hour() == 0 && currentDT.second() == 0)        
+        {                           // at midnight...
+            stepCount.reset();      // set the step count to 0
+            gps.resetDistance();    // set the distance travelled to 0
+        }
+
         display.showTime(currentDT);
         // display.monitorTimeout(currentDT, 2*60);      // timeout after n mins
         display.showGps(gps.isValid(), gps.getDistance());
