@@ -23,6 +23,8 @@ public:
     float getLatitude() const { return m_fix.latitude(); }
     float getDistance() const { return m_dist; }
 
+    void resetDistance() { m_dist = 0; }
+
 private:
     void calculateDistance();
 
