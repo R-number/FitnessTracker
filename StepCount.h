@@ -18,6 +18,7 @@ public:
     void loop();
 
     uint16_t get() const { return m_steps; }
+    void reset() { m_steps = 0; }
 
 private:
     uint16_t m_steps;
