@@ -13,6 +13,8 @@
 
 #include "Arduino.h"
 
+/* typedefs for structures to aid in parsing data 
+between the app and the device */
 typedef union
 {
     uint32_t VAL;
@@ -46,6 +48,8 @@ typedef union
 class BTComms
 {
 public:
+/* construct with references to the other modules so the BTComms
+can access thier data */
     BTComms(HardwareSerial &BTSerialPort, DSRtc &rtcRef, 
             GPS &gpsRef, StepCount &scRef, HeartRate &hrRef);
 
@@ -61,8 +65,10 @@ private:
     uint8_t asciiToHex(char c);
 
 private:
-    HardwareSerial &m_BT;       // keep a reference to the hardware serial port we are using
-                                // this way we can refer to it without using confusing Serial'n' name
+/* keep a reference to the hardware serial port we are using 
+this way we can refer to it without using confusing Serial'n' name */
+    HardwareSerial &m_BT;       
+
     char m_rxBuf[1024];
     uint16_t m_rxLen;
     /* the following are references to the other module to allow bt

@@ -1,7 +1,7 @@
 /*
 Authour:        Team R-Number
 Date Created:   25/02/2021
-File name:      Lcd.cpp
+File name:      Display.cpp
 */
 
 #include "Display.h"

@@ -6,7 +6,7 @@ File name:      HeartRate.h
 
 #pragma once
 
-#include "DFRobot_Heartrate.h"
+#include "DFRobot_Heartrate.h"  // library used for heartrate sensor
 
 class HeartRate
 {

@@ -16,7 +16,8 @@ GPS::GPS(HardwareSerial &GPSSerialPort)
 }
 
 void GPS::init()
-{
+{   /* The following init code is from NeoGPS library "NEMA.ino" setup function */
+    #ifdef DEBUG_SERIAL
     Serial.println("init GPS");
     Serial.print( F("NMEA.INO: started\n") );
     Serial.print( F("  fix object size = ") );
@@ -55,7 +56,9 @@ void GPS::init()
     Serial.print  ( m_gpsParser.string_for( LAST_SENTENCE_IN_INTERVAL ) );
     Serial.println( F(" sentence is received.\n"
                         "  You should confirm this with NMEAorder.ino\n") );
-                        
+    #endif
+    /* --- end of NeoGPS code --- */  
+
     m_gpsPort.begin(9600);
 
     m_dist = 0;
@@ -103,7 +106,8 @@ void GPS::calculateDistance()
     * static due to gps jitter
     */
 
-    if(m_fix.valid.location && m_fix.valid.date && m_fix.valid.time)        // do we have a valid fix?
+    /* do we have a valid fix? */
+    if(m_fix.valid.location && m_fix.valid.date && m_fix.valid.time)
     {
         latAccumulator += m_fix.location.lat();
         lonAccumulator += m_fix.location.lon();
@@ -136,17 +140,17 @@ void GPS::calculateDistance()
 
             /* only accumulate the distance when location is valid and we are above certain speed */
             if(m_locValid && (m_fix.speed_kph() > 0.5f))          
-            {
-                m_dist += m_currentLoc.DistanceKm(m_oldLoc);    // calculate distance between old and new
+            {   /* calculate distance between old and new */
+                m_dist += m_currentLoc.DistanceKm(m_oldLoc);    
 
                 #ifdef DEBUG_SERIAL
                 Serial.print("Dist(km): ");
                 Serial.println(m_dist, 6);
                 #endif
             }
-            m_oldLoc = m_currentLoc;                            // old = new
+            m_oldLoc = m_currentLoc;        // old = new
             count = 0;
-            m_locValid = true;                                  // we have been round once (or more) - location is valid
+            m_locValid = true;              // we have been round once (or more) - location is valid
         }
     }
     else
@@ -155,7 +159,7 @@ void GPS::calculateDistance()
         Serial.println("No GPS");
         #endif
 
-        m_locValid = false;
-        count = 0;
+        m_locValid = false;     // if we loose gps signal, we no longer have a valid location
+        count = 0;              // reset the count
     }
 }

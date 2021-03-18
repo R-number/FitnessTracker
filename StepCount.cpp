@@ -6,8 +6,8 @@ File name:      StepCount.cpp
 
 #include "StepCount.h"
 
-#define DEBUG_SERIAL
-// #define BEBUG_LED
+// #define DEBUG_SERIAL        // comment out to stop serial prints
+// #define BEBUG_LED        // comment out to stop led flash
 
 StepCount::StepCount()
     : m_steps(0)

@@ -7,7 +7,7 @@ File name:      StepCount.h
 #pragma once
 
 #include <Wire.h>
-#include <SparkFun_ADXL345.h>
+#include <SparkFun_ADXL345.h>   // library for accelerometer
 
 class StepCount
 {

@@ -9,7 +9,7 @@
 #define STATUS_PIN  27
 #define EN_PIN      28
 
-#define DEBUG_SERIAL        // comment out to stop debug serial prints
+// #define DEBUG_SERIAL        // comment out to stop debug serial prints
 
 BTComms::BTComms(HardwareSerial &BTSerialPort, DSRtc &rtcRef, 
                 GPS &gpsRef, StepCount &scRef, HeartRate &hrRef)
@@ -28,7 +28,7 @@ void BTComms::init()
     pinMode(EN_PIN, OUTPUT);
 }
 
-void BTComms::status()
+void BTComms::status()  // used in debugging
 {
     digitalWrite(LED_BUILTIN, digitalRead(STATUS_PIN));  // set the led based on the HC-05 current status
 }
@@ -39,27 +39,30 @@ void BTComms::loop()
 
     while(m_BT.available() > 0)
     {
+        /* read until the terminator then clear the buffer (we ignore anything else thats in there) */
         m_rxLen = m_BT.readBytesUntil('Z', m_rxBuf, 1024);
-        m_BT.read();    // read until the terminator then clear the buffer (we ignore anything else thats in there)
+        m_BT.read();
         newData = true;
     }
 
     if(newData)
     {
+        #ifdef DEBUG_SERIAL
         Serial.print("Rxlen: ");
         Serial.println(m_rxLen);
 
-        #ifdef DEBUG_SERIAL
         for(uint16_t i=0; i<m_rxLen; i++)
         {
             Serial.println(m_rxBuf[i]);
         }
         #endif
 
-        parse();
+        parse();        // parse the new data
     }
 }
 
+/* read and write were used in debugging to ensure BT comms 
+working as expected */
 void BTComms::read()
 {
     if(m_BT.available() > 0)
@@ -81,9 +84,10 @@ void BTComms::parse()
     nibbles32_t tempTime = {0};
     nibbles16_t tempDist = {0}, tempHR = {0}, tempSteps = {0};
 
-    switch(m_rxBuf[0])
+    switch(m_rxBuf[0])  // switch on the first byte, this tells us what the 
     {
-        case 'T':
+        case 'T':       // app is sending the time...
+            /* read out each nibble into temp structure */
             tempTime.NIBBLE7 = asciiToHex(m_rxBuf[1]);
             tempTime.NIBBLE6 = asciiToHex(m_rxBuf[2]);
             tempTime.NIBBLE5 = asciiToHex(m_rxBuf[3]);
@@ -97,8 +101,10 @@ void BTComms::parse()
             m_BT.write("TZ\n");                         // reply to verify we recieved the time
             break;
         
-        case 'D':
+        case 'D':   // the app wants to know the distance travelled
+            /* load the temp structure with the current distance travelled*/
             tempDist = {.VAL = m_gpsRef.getDistance()*1000};
+            /* send as hex nibbles in ASCII */
             m_BT.write("D");
             m_BT.write(hexToAscii(tempDist.NIBBLE3));
             m_BT.write(hexToAscii(tempDist.NIBBLE2));
@@ -107,9 +113,11 @@ void BTComms::parse()
             m_BT.write("Z\n");
             break;
 
-        case 'H':
+        case 'H':   // the app want to know the users heart rate
+            /* load the temp structure with the current bpm */
             tempHR = {.VAL = m_hrRef.get()};
             m_BT.write("H");
+            /* send as hex nibbles in ASCII */
             m_BT.write(hexToAscii(tempHR.NIBBLE3));
             m_BT.write(hexToAscii(tempHR.NIBBLE2));
             m_BT.write(hexToAscii(tempHR.NIBBLE1));
@@ -117,9 +125,11 @@ void BTComms::parse()
             m_BT.write("Z\n");
             break;
         
-        case 'S':
+        case 'S':   // the app want to know the users step count
+        /* load the temp structure with the current steps */
             tempSteps = {.VAL = m_scRef.get()};
             m_BT.write("S");
+            /* send as hex nibbles in ASCII */
             m_BT.write(hexToAscii(tempSteps.NIBBLE3));
             m_BT.write(hexToAscii(tempSteps.NIBBLE2));
             m_BT.write(hexToAscii(tempSteps.NIBBLE1));
@@ -127,11 +137,13 @@ void BTComms::parse()
             m_BT.write("Z\n");
             break;
         
-        default:
-            Serial.println("Error, unidenfitied message received!");
+        default:    // default case - if we get anything else print an error
+            Serial.println("Error, unidentified message received!");
             break;
     }
 }
+
+/* helper functions to convert between hex and ascii */
 
 char BTComms::hexToAscii(uint8_t d)
 {

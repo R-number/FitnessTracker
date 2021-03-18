@@ -7,18 +7,20 @@ File name:      GPS.h
 #pragma once
 
 #include <Arduino.h>
-#include <NMEAGPS.h>
+#include <NMEAGPS.h>    // this library helps to parse GPS messages
 
 class GPS
 {
 public:
+/* construct GPS with a reference to a serial port (HardwareSerial &)
+to allow comms with gps module */
     GPS(HardwareSerial &GPSSerialPort);
 
     void init();
     void loop();
     bool isValid() const { return m_locValid; }
 
-    float getAltitude() const { return m_fix.latitude(); }
+    float getAltitude() const { return m_fix.altitude(); }
     float getLongitude() const { return m_fix.longitude(); }
     float getLatitude() const { return m_fix.latitude(); }
     float getDistance() const { return m_dist; }
