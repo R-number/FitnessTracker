@@ -1,7 +1,7 @@
 /*
 Authour:        Team R-Number
 Date Created:   25/02/2021
-File name:      Lcd.h
+File name:      Display.h
 */
 
 #pragma once
@@ -66,9 +66,20 @@ class Display
 {
 public:
     Display();
+    
     void init();
     void increment();
+
     void showTime(DateTime &t);
+    void monitorTimeout(DateTime &t, uint16_t timeoutTime);
+    void showSteps(uint16_t steps);
+    void showHR(uint8_t bpm);
+    void showGps(bool valid, float dist);
+
+    void showGpsSignal(bool show);
+    void showGpsData(float lat, float lng);
+    void showGpsData(float lat, float lng, float alt);
+    void showGpsData(float lat, float lng, float alt, float dist);
 
 private:
 

@@ -16,8 +16,9 @@ public:
     DSRtc();
 
     void init();
-    const DateTime& get() const;
+    DateTime get() const;
     void set(DateTime &t);
+    void set(uint32_t timeStamp);
     void print(const DateTime &t);
 
 private:
