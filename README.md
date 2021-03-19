@@ -7,4 +7,6 @@
 - GPS
 - RGB OLED
 
+Code written by Marcus Corbin, Jayant Kalyan and Shantanu Awasthi
+
 These modules are all controlled using a centralised microcontroller (Arduino Due).
